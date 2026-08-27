@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FaceAttend</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">LOCAL FACE ATTENDANCE</p>
+        <h1>FaceAttend</h1>
+      </div>
+      <div class="header-statuses">
+        <div id="metrics" class="health">Đang tải metrics…</div>
+        <div id="health" class="health">Đang kiểm tra hệ thống…</div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="camera-panel panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">CAMERA</p>
+            <h2>Laptop webcam</h2>
+          </div>
+          <button id="start-camera" class="button secondary">Bật camera</button>
+        </div>
+        <div class="video-shell">
+          <video id="video" autoplay muted playsinline></video>
+          <div id="camera-placeholder" class="camera-placeholder">Bật camera để bắt đầu</div>
+        </div>
+        <p id="camera-status" class="muted">Camera chưa kết nối.</p>
+      </section>
+
+      <section class="workspace panel">
+        <nav class="tabs" aria-label="FaceAttend workspace">
+          <button class="tab active" data-tab="attendance">Chấm công</button>
+          <button class="tab" data-tab="enrollment">Đăng ký khuôn mặt</button>
+          <button class="tab" data-tab="reviews">Cần duyệt</button>
+        </nav>
+
+        <div id="attendance-tab" class="tab-content active">
+          <div class="form-grid inline-form">
+            <label>
+              Camera ID
+              <input id="camera-id" value="laptop-webcam" maxlength="128" />
+            </label>
+            <label>
+              Loại sự kiện
+              <select id="attendance-direction">
+                <option value="auto">Tự động vào/ra</option>
+                <option value="check_in">Check-in</option>
+                <option value="check_out">Check-out</option>
+              </select>
+            </label>
+          </div>
+          <button id="scan-toggle" class="button primary" disabled>Bắt đầu quét</button>
+          <div id="recognition-result" class="result idle">Đợi bật camera và bắt đầu quét.</div>
+
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">EVENTS</p>
+              <h2>Lượt chấm công gần đây</h2>
+            </div>
+            <button id="refresh-events" class="button text">Làm mới</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Thời gian</th>
+                  <th>Nhân viên</th>
+                  <th>Sự kiện</th>
+                  <th>Camera</th>
+                  <th>Điểm match</th>
+                </tr>
+              </thead>
+              <tbody id="attendance-events"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="enrollment-tab" class="tab-content">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">ENROLLMENT</p>
+              <h2>Tạo nhân viên</h2>
+            </div>
+          </div>
+          <form id="employee-form" class="form-grid">
+            <label>
+              Mã nhân viên
+              <input id="employee-code" required maxlength="64" placeholder="NV001" />
+            </label>
+            <label>
+              Họ và tên
+              <input id="employee-name" required maxlength="160" placeholder="Nguyễn Văn A" />
+            </label>
+            <label>
+              Site
+              <input id="employee-site" required value="default" maxlength="64" />
+            </label>
+            <div class="form-action"><button class="button primary" type="submit">Tạo và bắt đầu</button></div>
+          </form>
+
+          <section id="enrollment-workspace" class="enrollment-workspace hidden">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow">ACTIVE SESSION</p>
+                <h2 id="enrollment-employee"></h2>
+              </div>
+              <span id="enrollment-progress" class="badge"></span>
+            </div>
+            <div id="enrollment-result" class="result idle"></div>
+            <div class="enrollment-actions">
+              <button id="capture-enrollment" class="button primary">Lấy mẫu hiện tại</button>
+              <button id="complete-enrollment" class="button secondary">Hoàn tất sớm</button>
+            </div>
+          </section>
+
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">DIRECTORY</p>
+              <h2>Nhân viên</h2>
+            </div>
+            <button id="refresh-employees" class="button text">Làm mới</button>
+          </div>
+          <p class="muted">Bắt đầu một session, lấy 3–5 mẫu rõ nét ở chính diện, quay nhẹ trái và quay nhẹ phải.</p>
+          <div id="employees" class="employee-list"></div>
+        </div>
+
+        <div id="reviews-tab" class="tab-content">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">MANUAL REVIEW</p>
+              <h2>Khuôn mặt chưa xác định</h2>
+            </div>
+            <button id="refresh-reviews" class="button text">Làm mới</button>
+          </div>
+          <p class="muted">Chỉ các lượt unknown hoặc mơ hồ mới được lưu làm evidence mã hóa để xem lại.</p>
+          <div id="reviews" class="review-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <template id="employee-template">
+      <article class="employee-card">
+        <div>
+          <strong class="employee-name"></strong>
+          <p class="employee-meta"></p>
+        </div>
+        <div class="employee-actions">
+          <span class="template-count"></span>
+          <button class="button secondary enroll-button">Bắt đầu đăng ký</button>
+        </div>
+      </article>
+    </template>
+
+    <template id="review-template">
+      <article class="review-card">
+        <img class="review-evidence hidden" alt="Evidence khuôn mặt cần duyệt" />
+        <div class="review-body">
+          <strong class="review-reason"></strong>
+          <p class="review-meta"></p>
+        </div>
+        <button class="button secondary dismiss-review">Bỏ qua</button>
+      </article>
+    </template>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

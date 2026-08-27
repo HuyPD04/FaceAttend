@@ -1,0 +1,156 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0b1020;
+  color: #edf1ff;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; min-width: 320px; }
+
+button, input, select { font: inherit; }
+
+button { cursor: pointer; }
+
+.topbar, .layout { max-width: 1240px; margin: auto; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 28px 24px 20px; }
+
+.header-statuses { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+
+h1, h2, p { margin: 0; }
+
+h1 { font-size: 1.55rem; letter-spacing: -0.04em; }
+
+h2 { font-size: 1.08rem; letter-spacing: -0.02em; }
+
+.eyebrow { margin-bottom: 5px; color: #8fa2cf; font-size: .69rem; font-weight: 750; letter-spacing: .12em; }
+
+.layout { display: grid; grid-template-columns: minmax(300px, .8fr) minmax(470px, 1.2fr); gap: 20px; padding: 0 24px 36px; }
+
+.panel { border: 1px solid #273559; border-radius: 16px; background: #121a30; box-shadow: 0 14px 40px rgba(0, 0, 0, .2); }
+
+.camera-panel { padding: 18px; align-self: start; }
+
+.panel-heading, .section-heading { display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+
+.video-shell { position: relative; overflow: hidden; margin-top: 18px; aspect-ratio: 4 / 3; border-radius: 11px; background: #070b16; }
+
+video { display: block; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+
+.camera-placeholder { position: absolute; inset: 0; display: grid; place-items: center; color: #8995b8; }
+
+.camera-placeholder.hidden { display: none; }
+
+.muted { margin-top: 12px; color: #9aa7c8; font-size: .88rem; line-height: 1.5; }
+
+.health { border: 1px solid #34517f; border-radius: 999px; padding: 8px 12px; color: #c5d5f6; font-size: .8rem; }
+
+.health.ok { border-color: #1e885f; color: #9ff0c9; }
+
+.health.error { border-color: #a74659; color: #ffbdc8; }
+
+.workspace { min-height: 650px; }
+
+.tabs { display: flex; border-bottom: 1px solid #273559; padding: 0 20px; }
+
+.tab { border: 0; border-bottom: 2px solid transparent; padding: 18px 4px 14px; margin-right: 24px; background: transparent; color: #9aa7c8; }
+
+.tab.active { border-color: #63e3bb; color: #effff9; }
+
+.tab-content { display: none; padding: 22px; }
+
+.tab-content.active { display: block; }
+
+.hidden { display: none !important; }
+
+.form-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+
+.inline-form { grid-template-columns: 1fr 1fr; margin-bottom: 16px; }
+
+label { display: grid; gap: 6px; color: #aebadd; font-size: .8rem; }
+
+input, select { width: 100%; border: 1px solid #344466; border-radius: 8px; padding: 10px; background: #0c1326; color: #f4f7ff; outline: none; }
+
+input:focus, select:focus { border-color: #63e3bb; box-shadow: 0 0 0 3px rgba(99, 227, 187, .12); }
+
+.form-action { align-self: end; }
+
+.button { border: 1px solid transparent; border-radius: 8px; padding: 9px 12px; font-size: .84rem; font-weight: 700; transition: .15s ease; }
+
+.button:disabled { cursor: not-allowed; opacity: .5; }
+
+.primary { background: #58d5ac; color: #052319; }
+
+.primary:hover:not(:disabled) { background: #7ee9c5; }
+
+.secondary { border-color: #3b4d72; background: #1a2642; color: #dce7ff; }
+
+.secondary:hover:not(:disabled), .text:hover { border-color: #607fb3; background: #233354; }
+
+.text { border-color: transparent; background: transparent; color: #9ec9ff; }
+
+.result { margin-top: 16px; border: 1px solid #344466; border-radius: 10px; padding: 15px; background: #0c1326; color: #c8d4f4; line-height: 1.45; }
+
+.result.pending { border-color: #956f22; color: #ffe09b; }
+
+.result.confirmed { border-color: #1e885f; color: #a6f3ce; }
+
+.result.cooldown { border-color: #387eb5; color: #a8d6ff; }
+
+.result.unknown, .result.error { border-color: #a74659; color: #ffc3ce; }
+
+.section-heading { margin-top: 28px; }
+
+.section-heading.compact { margin-top: 0; }
+
+.enrollment-workspace { margin-top: 24px; border: 1px solid #34517f; border-radius: 12px; padding: 16px; background: #101a31; }
+
+.enrollment-actions { display: flex; gap: 10px; margin-top: 14px; }
+
+.badge { border-radius: 999px; padding: 7px 10px; background: #223655; color: #b9d9ff; font-size: .78rem; font-weight: 750; white-space: nowrap; }
+
+.table-wrap { overflow-x: auto; margin-top: 14px; }
+
+table { width: 100%; border-collapse: collapse; min-width: 590px; font-size: .83rem; }
+
+th, td { padding: 11px 8px; border-bottom: 1px solid #273559; text-align: left; }
+
+th { color: #9aa7c8; font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; }
+
+td { color: #dbe5ff; }
+
+.employee-list { display: grid; gap: 10px; margin-top: 14px; }
+
+.employee-card { display: flex; justify-content: space-between; gap: 12px; align-items: center; border: 1px solid #2b395b; border-radius: 10px; padding: 13px; background: #10192d; }
+
+.employee-name { display: block; color: #eff4ff; }
+
+.employee-meta, .template-count { margin: 4px 0 0; color: #9aa7c8; font-size: .78rem; }
+
+.employee-actions { display: flex; gap: 10px; align-items: center; }
+
+.review-list { display: grid; gap: 12px; margin-top: 16px; }
+
+.review-card { display: flex; gap: 12px; align-items: center; border: 1px solid #2b395b; border-radius: 10px; padding: 12px; background: #10192d; }
+
+.review-evidence { width: 72px; height: 72px; flex: 0 0 72px; border-radius: 8px; object-fit: cover; }
+
+.review-body { flex: 1; min-width: 0; }
+
+.review-meta { margin: 5px 0 0; color: #9aa7c8; font-size: .78rem; line-height: 1.45; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .workspace { min-height: auto; }
+}
+
+@media (max-width: 580px) {
+  .topbar, .layout { padding-left: 14px; padding-right: 14px; }
+  .topbar { align-items: flex-start; gap: 14px; flex-direction: column; }
+  .header-statuses { justify-content: flex-start; }
+  .form-grid, .inline-form { grid-template-columns: 1fr; }
+  .employee-card, .employee-actions { align-items: flex-start; flex-direction: column; }
+  .review-card { align-items: flex-start; flex-wrap: wrap; }
+}
