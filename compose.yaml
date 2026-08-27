@@ -1,0 +1,68 @@
+services:
+  mongo:
+    image: mongo:8.0
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  faceattend:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      MONGODB_URI: mongodb://mongo:27017
+      MONGODB_DATABASE: ${MONGODB_DATABASE:-faceattend}
+      DATA_DIR: ${DATA_DIR:-data}
+      FAISS_INDEX_PATH: ${FAISS_INDEX_PATH:-data/faiss/templates.index}
+      FERNET_KEY_FILE: ${FERNET_KEY_FILE:-data/fernet.key}
+      ONNX_PROVIDERS: ${ONNX_PROVIDERS:-CPUExecutionProvider}
+      DETECTOR_MODEL_PATH: ${DETECTOR_MODEL_PATH:-data/models/models/buffalo_l/det_10g.onnx}
+      DETECTOR_MODEL_ID: ${DETECTOR_MODEL_ID:-scrfd-10g-bnkps-v1}
+      DETECTOR_INPUT_SIZE: ${DETECTOR_INPUT_SIZE:-640}
+      DETECTOR_THRESHOLD: ${DETECTOR_THRESHOLD:-0.50}
+      DETECTOR_NMS_THRESHOLD: ${DETECTOR_NMS_THRESHOLD:-0.40}
+      RECOGNIZER_MODEL_PATH: ${RECOGNIZER_MODEL_PATH:-data/models/models/buffalo_l/w600k_r50.onnx}
+      RECOGNIZER_MODEL_ID: ${RECOGNIZER_MODEL_ID:-arcface-w600k-r50-v1}
+      RECOGNIZER_INPUT_SIZE: ${RECOGNIZER_INPUT_SIZE:-112}
+      RECOGNIZER_PREPROCESS_VERSION: ${RECOGNIZER_PREPROCESS_VERSION:-arcface-112x112-5pt-v1}
+      EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION:-512}
+      MATCH_THRESHOLD: ${MATCH_THRESHOLD:-0.48}
+      MATCH_MARGIN: ${MATCH_MARGIN:-0.06}
+      DUPLICATE_THRESHOLD: ${DUPLICATE_THRESHOLD:-0.62}
+      MIN_FACE_PIXELS: ${MIN_FACE_PIXELS:-120}
+      MIN_DETECTION_SCORE: ${MIN_DETECTION_SCORE:-0.80}
+      MIN_SHARPNESS: ${MIN_SHARPNESS:-60}
+      MIN_BRIGHTNESS: ${MIN_BRIGHTNESS:-45}
+      MAX_BRIGHTNESS: ${MAX_BRIGHTNESS:-215}
+      MAX_ENROLLMENT_YAW_DEGREES: ${MAX_ENROLLMENT_YAW_DEGREES:-28}
+      MAX_ENROLLMENT_ROLL_DEGREES: ${MAX_ENROLLMENT_ROLL_DEGREES:-15}
+      CONFIRMATION_FRAMES: ${CONFIRMATION_FRAMES:-3}
+      CONFIRMATION_WINDOW_SECONDS: ${CONFIRMATION_WINDOW_SECONDS:-2.0}
+      ATTENDANCE_COOLDOWN_SECONDS: ${ATTENDANCE_COOLDOWN_SECONDS:-600}
+      ENROLLMENT_TARGET_SAMPLES: ${ENROLLMENT_TARGET_SAMPLES:-5}
+      ENROLLMENT_MIN_SAMPLES: ${ENROLLMENT_MIN_SAMPLES:-3}
+      ENROLLMENT_DUPLICATE_SIMILARITY: ${ENROLLMENT_DUPLICATE_SIMILARITY:-0.997}
+      LIVENESS_MODE: ${LIVENESS_MODE:-disabled}
+      LIVENESS_MODEL_PATH: ${LIVENESS_MODEL_PATH:-data/models/liveness.onnx}
+      LIVENESS_THRESHOLD: ${LIVENESS_THRESHOLD:-0.90}
+      LIVENESS_INPUT_SIZE: ${LIVENESS_INPUT_SIZE:-80}
+      LIVENESS_REAL_CLASS_INDEX: ${LIVENESS_REAL_CLASS_INDEX:-1}
+      REVIEW_EVIDENCE_ENABLED: ${REVIEW_EVIDENCE_ENABLED:-true}
+      REVIEW_EVIDENCE_MAX_PIXELS: ${REVIEW_EVIDENCE_MAX_PIXELS:-240}
+      REVIEW_COOLDOWN_SECONDS: ${REVIEW_COOLDOWN_SECONDS:-60}
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

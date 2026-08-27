@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "faceattend"
+version = "0.2.0"
+description = "Laptop-webcam face attendance service"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "cryptography==44.0.0",
+    "faiss-cpu==1.9.0.post1",
+    "fastapi==0.115.6",
+    "numpy==1.26.4",
+    "onnxruntime==1.20.1",
+    "opencv-python-headless==4.10.0.84",
+    "pydantic-settings==2.6.1",
+    "pymongo==4.10.1",
+    "python-multipart==0.0.20",
+    "uvicorn[standard]==0.32.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
